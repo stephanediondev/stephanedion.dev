@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>St&eacute;phane Dion</title>
+<meta name="theme-color" content="#232942">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="HandheldFriendly" content="true">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="apple-touch-icon" sizes="512x512" href="app/icons/icon-512x512.png">
+<link rel="apple-touch-icon-precomposed" sizes="512x512" href="app/icons/icon-512x512.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" sizes="16x16" href="app/icons/icon-16x16.png">
+<link rel="icon" sizes="32x32" href="app/icons/icon-32x32.png">
+<link rel="icon" sizes="64x64" href="app/icons/icon-64x64.png">
+<link rel="icon" sizes="128x128" href="app/icons/icon-128x128.png">
+<link rel="icon" sizes="256x256" href="app/icons/icon-256x256.png">
+<link rel="icon" sizes="512x512" href="app/icons/icon-512x512.png">
+<meta content="D&eacute;veloppeur web" name="description">
+<meta content="D&eacute;veloppeur web" property="og:description">
+<meta content="St&eacute;phane Dion" property="og:site_name">
+<meta content="St&eacute;phane Dion" property="og:title">
+<meta content="profile" property="og:type">
+<meta content="https://stephanedion.dev" property="og:url">
+<meta name="google-site-verification" content="m5IiEmgPPZuKpeh0sO1aHhWk4yAQSW7dSeNge_MdODo">
+<style type="text/css">
+body {
+    background-color: #232942;
+    color: #ffffff;
+    font-family: "Source Sans Pro", Helvetica, sans-serif;
+    font-size: 12pt;
+    font-weight: 300;
+    letter-spacing: 0.025em;
+    line-height: 1.65;
+    margin: 0px;
+}
+a {
+    color: #ffffff;
+}
+section {
+    margin: 0px;
+    padding: 20px 5px;
+}
+section.new-page {
+    page-break-before: always;
+}
+body section:nth-child(even) {
+    background-color: #292f49;
+}
+body section:nth-child(odd) {
+    background-color: #232942;
+}
+body section div {
+    margin: auto;
+    max-width: 900px;
+}
+h1, h2, h3, h4, p {
+    margin: 0px;
+    padding: 5px 0px;
+}
+@media print {
+    body, a {
+        color: #000000;
+    }
+    section {
+        padding: 10px 0px;
+    }
+    body section:nth-child(even), body section:nth-child(odd) {
+        background-color: #FFFFFF;
+    }
+    h3 {
+        border-top: 1px solid #000000;
+    }
+}
+</style>
+</head>
+<body>
+
+<section>
+<div>
+<h1>St&eacute;phane Dion</h1>
+
+<h2>D&eacute;veloppeur web</h2>
+
+<p>
+    <a href="https://fast.com/">https://fast.com/</a>
+</p>
+
+<p>
+    <a href="https://speed.cloudflare.com/">https://speed.cloudflare.com/</a>
+</p>
+
+<p>
+    <a href="https://viewportsizer.com/">https://viewportsizer.com/</a><br>
+</p>
+
+<p>
+    <a href="https://tomayac.github.io/pwa-feature-detector/">https://tomayac.github.io/pwa-feature-detector/</a><br>
+</p>
+
+<p>
+    <a href="https://whatpwacando.today/">https://whatpwacando.today/</a><br>
+</p>
+
+<p>
+    <a href="https://webkit.org/status/">https://webkit.org/status/</a><br>
+</p>
+</div>
+</section>
+
+<script type="text/javascript">
+function messageToServiceWorker(content) {
+    if('serviceWorker' in navigator && 'https:' == window.location.protocol) {
+        navigator.serviceWorker.ready.then(function() {
+            return new Promise(function(resolve, reject) {
+                var messageChannel = new MessageChannel();
+                messageChannel.port1.onmessage = function(event) {
+                    if(event.data.error) {
+                        reject(event.data.error);
+                    } else {
+                        resolve(event.data);
+                    }
+                };
+                if(navigator.serviceWorker.controller) {
+                    navigator.serviceWorker.controller.postMessage(content, [messageChannel.port2]);
+                }
+            });
+        });
+    }
+}
+
+if('serviceWorker' in navigator && 'https:' == window.location.protocol) {
+    navigator.serviceWorker.register('serviceworker.js')
+    .then(function(ServiceWorkerRegistration) {
+        ServiceWorkerRegistration.addEventListener('updatefound', function() {
+            console.log('updatefound');
+            messageToServiceWorker({'command': 'reload'});
+        });
+    });
+
+    navigator.serviceWorker.addEventListener('message', function(MessageEvent) {
+        console.log(MessageEvent.data.type);
+        switch(MessageEvent.data.type) {
+            case 'get-version':
+                console.log(MessageEvent.data.content);
+                break;
+            case 'reload':
+                document.location.reload(true);
+                break;
+        }
+    });
+}
+
+window.addEventListener('beforeinstallprompt', function(BeforeInstallPromptEvent) {
+    BeforeInstallPromptEvent.preventDefault();
+});
+</script>
+
+</body>
+</html>
