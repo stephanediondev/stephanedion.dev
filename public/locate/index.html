@@ -23,7 +23,7 @@
 <body style="margin:0px;height:100%;">
 
 <div style="position:fixed;top:5px;left:5px;z-index:1000;">
-    <a href="#" id="geolocationGet" class="btn btn-primary btn-sm">Locate</a>
+    <a href="#" id="locate" class="btn btn-primary btn-sm">Locate</a>
 </div>
 
 <div id="map" style="height:100%;position:relative;width:100%;"></div>
@@ -33,25 +33,29 @@
 <script src="https://api.mapbox.com/mapbox-gl-js/v2.8.2/mapbox-gl.js"></script>
 
 <script>
+let watch = null;
 let marker = null;
+let options = {'enableHighAccuracy': true, 'timeout': 10000};
 
-function geolocationGet() {
+function success(Geoposition) {
+    console.log(Geoposition);
+    map.setCenter([Geoposition.coords.longitude, Geoposition.coords.latitude]);
+    if (null === marker) {
+        marker = new mapboxgl.Marker().setLngLat([Geoposition.coords.longitude, Geoposition.coords.latitude]).addTo(map);
+    } else {
+        marker.setLngLat([Geoposition.coords.longitude, Geoposition.coords.latitude]);
+    }
+}
+
+function error(PositionError) {
+    console.log(PositionError);
+}
+
+function locate() {
     if('geolocation' in navigator) {
-        navigator.geolocation.watchPosition(
-            function(Geoposition) {
-                console.log(Geoposition);
-                map.setCenter([Geoposition.coords.longitude, Geoposition.coords.latitude]);
-                if (null === marker) {
-                    marker = new mapboxgl.Marker().setLngLat([Geoposition.coords.longitude, Geoposition.coords.latitude]).addTo(map);
-                } else {
-                    marker.setLngLat([Geoposition.coords.longitude, Geoposition.coords.latitude]);
-                }
-            },
-            function(PositionError) {
-                console.log(PositionError);
-            },
-            {'enableHighAccuracy': true, 'timeout': 10000}
-        );
+        if (null === watch) {
+            watch = navigator.geolocation.watchPosition(success, error, options);
+        }
     }
 }
 
@@ -61,15 +65,15 @@ if ('permissions' in navigator) {
     }).then(function(PermissionStatus) {
         console.log(PermissionStatus);
         if ('granted' === PermissionStatus.state) {
-            document.getElementById('geolocationGet').remove();
-            geolocationGet();
+            document.getElementById('locate').remove();
+            locate();
         }
     });
 }
 
-document.getElementById('geolocationGet').addEventListener('click', function() {
-    document.getElementById('geolocationGet').remove();
-    geolocationGet();
+document.getElementById('locate').addEventListener('click', function() {
+    document.getElementById('locate').remove();
+    locate();
 });
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
