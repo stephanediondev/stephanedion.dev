@@ -54,7 +54,6 @@ function error(PositionError) {
 }
 
 function locate() {
-    return;
     if (null === watch) {
         watch = navigator.geolocation.watchPosition(success, error, options);
     }
@@ -97,13 +96,19 @@ const map = new mapboxgl.Map({
 const nav = new mapboxgl.NavigationControl();
 map.addControl(nav, 'bottom-right');
 
-map.addControl(new mapboxgl.GeolocateControl({
+const scale = new mapboxgl.ScaleControl({
+    maxWidth: 80,
+    unit: 'metric'
+});
+map.addControl(scale);
+
+/*map.addControl(new mapboxgl.GeolocateControl({
     positionOptions: {
         enableHighAccuracy: true
     },
     trackUserLocation: true,
     showUserHeading: true
-}));
+}));*/
 </script>
 
 </body>
