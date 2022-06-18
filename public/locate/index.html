@@ -60,7 +60,8 @@ function locate() {
     }
 }
 
-if ('permissions' in navigator) {
+if('geolocation' in navigator) {
+    if ('permissions' in navigator) {
     navigator.permissions.query({
         'name': 'geolocation'
     }).then(function(PermissionStatus) {
@@ -71,11 +72,13 @@ if ('permissions' in navigator) {
         }
     });
 }
-
-document.getElementById('locate').addEventListener('click', function() {
+    document.getElementById('locate').addEventListener('click', function() {
+        document.getElementById('locate').remove();
+        locate();
+    });
+} else {
     document.getElementById('locate').remove();
-    locate();
-});
+}
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
 
