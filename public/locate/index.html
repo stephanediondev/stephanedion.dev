@@ -53,10 +53,8 @@ function error(PositionError) {
 }
 
 function locate() {
-    if('geolocation' in navigator) {
-        if (null === watch) {
-            watch = navigator.geolocation.watchPosition(success, error, options);
-        }
+    if (null === watch) {
+        watch = navigator.geolocation.watchPosition(success, error, options);
     }
 }
 
