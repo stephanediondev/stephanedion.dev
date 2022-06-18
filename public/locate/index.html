@@ -39,6 +39,7 @@ let options = {'enableHighAccuracy': true, 'timeout': 10000};
 
 function success(Geoposition) {
     console.log(Geoposition);
+
     const position = new mapboxgl.LngLat(Geoposition.coords.longitude, Geoposition.coords.latitude);
     map.setCenter(position);
     if (null === marker) {
@@ -58,24 +59,29 @@ function locate() {
     }
 }
 
-if('geolocation' in navigator) {
-    if ('permissions' in navigator) {
-    navigator.permissions.query({
-        'name': 'geolocation'
-    }).then(function(PermissionStatus) {
-        console.log(PermissionStatus);
-        if ('granted' === PermissionStatus.state) {
-            document.getElementById('locate').remove();
-            locate();
-        }
-    });
+function removeButton() {
+    document.getElementById('locate').remove();
 }
+
+if ('geolocation' in navigator) {
+    if ('permissions' in navigator) {
+        navigator.permissions.query({
+            'name': 'geolocation'
+        }).then(function(PermissionStatus) {
+            console.log(PermissionStatus);
+            if ('granted' === PermissionStatus.state) {
+                removeButton();
+                locate();
+            }
+        });
+    }
+
     document.getElementById('locate').addEventListener('click', function() {
-        document.getElementById('locate').remove();
+        removeButton();
         locate();
     });
 } else {
-    document.getElementById('locate').remove();
+    removeButton();
 }
 
 mapboxgl.accessToken = MAPBOX_TOKEN;
