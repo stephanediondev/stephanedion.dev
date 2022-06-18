@@ -39,11 +39,12 @@ let options = {'enableHighAccuracy': true, 'timeout': 10000};
 
 function success(Geoposition) {
     console.log(Geoposition);
-    map.setCenter([Geoposition.coords.longitude, Geoposition.coords.latitude]);
+    const position = new mapboxgl.LngLat(Geoposition.coords.longitude, Geoposition.coords.latitude);
+    map.setCenter(position);
     if (null === marker) {
-        marker = new mapboxgl.Marker().setLngLat([Geoposition.coords.longitude, Geoposition.coords.latitude]).addTo(map);
+        marker = new mapboxgl.Marker().setLngLat(position).addTo(map);
     } else {
-        marker.setLngLat([Geoposition.coords.longitude, Geoposition.coords.latitude]);
+        marker.setLngLat(position);
     }
 }
 
@@ -81,7 +82,7 @@ mapboxgl.accessToken = MAPBOX_TOKEN;
 const map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/mapbox/streets-v11',
-    center: [2.2768245, 48.8588335],
+    center: [-39.5636285, 24.2219909],
     zoom: 11
 });
 </script>
