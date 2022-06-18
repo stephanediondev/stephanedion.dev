@@ -37,7 +37,7 @@ let marker = null;
 
 function geolocationGet() {
     if('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
+        navigator.geolocation.watchPosition(
             function(Geoposition) {
                 console.log(Geoposition);
                 map.setCenter([Geoposition.coords.longitude, Geoposition.coords.latitude]);
@@ -49,15 +49,26 @@ function geolocationGet() {
             },
             function(PositionError) {
                 console.log(PositionError);
-                writeHistory(PositionError.message);
-                setSnackbar(PositionError.message);
             },
             {'enableHighAccuracy': true, 'timeout': 10000}
         );
     }
 }
 
+if ('permissions' in navigator) {
+    navigator.permissions.query({
+        'name': 'geolocation'
+    }).then(function(PermissionStatus) {
+        console.log(PermissionStatus);
+        if ('granted' === PermissionStatus.state) {
+            document.getElementById('geolocationGet').remove();
+            geolocationGet();
+        }
+    });
+}
+
 document.getElementById('geolocationGet').addEventListener('click', function() {
+    document.getElementById('geolocationGet').remove();
     geolocationGet();
 });
 
