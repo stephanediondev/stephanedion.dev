@@ -1,6 +1,7 @@
 {
     "name": "Stéphane Dion",
     "short_name": "Stéphane D.",
+    "description": "Mon CV",
     "icons": [
         {
             "src": "app/icons/icon-16x16.png",
@@ -30,11 +31,15 @@
         {
             "src": "app/icons/icon-512x512.png",
             "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any"
         }
     ],
     "start_url": ".",
     "display": "standalone",
+    "orientation": "any",
+    "lang": "fr-FR",
+    "dir": "ltr",
     "background_color": "#232942",
     "theme_color": "#232942"
 }
